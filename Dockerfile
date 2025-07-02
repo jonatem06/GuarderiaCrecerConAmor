@@ -16,11 +16,12 @@ COPY package.json ./
 # Docker las instalará una vez cuando se construya la imagen por primera vez,
 # o si package.json cambia.
 RUN npm install
-# Si usas yarn, descomenta la siguiente línea:
-# RUN yarn install
 
 # Copia el resto del código fuente de la aplicación.
 COPY . .
+
+# Cambiar permisos
+RUN chown -R node:node /app
 
 # Exponemos el puerto que Vite usa por defecto para el desarrollo.
 # Asegúrate de que tu vite.config.js esté configurado para escuchar en este puerto
