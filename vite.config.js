@@ -1,10 +1,12 @@
 // vite.config.js
 import react from '@vitejs/plugin-react-swc'
+import tailwindcss from '@tailwindcss/vite' // Import Tailwind CSS plugin
 import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [
-    react()
+    react(),
+    tailwindcss() // Add Tailwind CSS plugin
   ],
   server: {
     host: true, // Crucial para que Vite escuche en 0.0.0.0
