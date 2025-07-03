@@ -1,13 +1,10 @@
-import './App.css'
-
+import './assets/css/App.css';
+import Router from './routes/routes';
 function App() {
 
   return (
-    <div className="bg-sky-700 px-4 py-8">
-      <h1 className="text-3xl font-bold underline text-white">
-        Hello world!
-      </h1>
-      <h2 className="text-white">holi bb de nuevo</h2>
+    <div>
+      <Router />
     </div>
   )
 }

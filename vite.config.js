@@ -1,6 +1,6 @@
 // vite.config.js
+import tailwindcss from '@tailwindcss/vite'; // Import Tailwind CSS plugin
 import react from '@vitejs/plugin-react-swc'
-import tailwindcss from '@tailwindcss/vite' // Import Tailwind CSS plugin
 import { defineConfig } from 'vite'
 
 export default defineConfig({
@@ -11,7 +11,7 @@ export default defineConfig({
   server: {
     host: true, // Crucial para que Vite escuche en 0.0.0.0
     port: 3000, // Asegura que escuche en el puerto 3000
-    allowedHosts: ['*', 'receive-enrolled-lying-start.trycloudflare.com'],
+    allowedHosts: ['*', 'applicable-rs-thailand-cave.trycloudflare.com'],
     watch: {
         usePolling: true // Útil en entornos virtualizados o con volúmenes montados
     },
