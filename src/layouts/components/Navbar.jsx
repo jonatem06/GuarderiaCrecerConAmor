@@ -1,11 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react'; // useEffect y useRef importados
 import { Link, useNavigate } from 'react-router-dom';
 import { menuItems, profileMenuItems } from '../menuConfig';
 
 const Navbar = () => {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null); // Para manejar el dropdown activo
+  const [openDropdown, setOpenDropdown] = useState(null);
   const navigate = useNavigate();
+  const dropdownRef = useRef(null); // Ref para el contenedor del dropdown principal
+  const profileDropdownRef = useRef(null); // Ref para el dropdown de perfil
+
+  // Hook para cerrar dropdowns si se hace clic fuera
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const targetElement = event.target;
+
+      // Cerrar dropdown de menú principal
+      // Verifica si dropdownRef.current existe y si el clic fue fuera de él
+      // Y también que el clic no fue en un botón que togglea un menú (para permitir abrir otro menú)
+      if (dropdownRef.current && !dropdownRef.current.contains(targetElement)) {
+        let isToggler = false;
+        const togglerButtons = document.querySelectorAll('.menu-item-toggler');
+        togglerButtons.forEach(button => {
+          if (button.contains(targetElement)) {
+            isToggler = true;
+          }
+        });
+        // Si el clic fue fuera del dropdown abierto Y no fue en un botón de toggle, entonces cierra.
+        if (!isToggler) {
+          setOpenDropdown(null);
+        }
+      }
+
+      // Cerrar dropdown de perfil
+      // Verifica si profileDropdownRef.current existe, si el clic fue fuera de él,
+      // Y si el clic no fue en el botón que abre el menú de perfil.
+      const profileMenuButton = document.getElementById('user-menu-button');
+      if (profileDropdownRef.current &&
+          !profileDropdownRef.current.contains(targetElement) &&
+          profileMenuButton &&
+          !profileMenuButton.contains(targetElement)
+        ) {
+        setProfileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [openDropdown, profileMenuOpen]); // Dependencias para re-ejecutar si cambian
+
 
   const handleLogout = () => {
     // Aquí iría la lógica de logout (ej. limpiar token, redirigir)
@@ -32,13 +76,11 @@ const Navbar = () => {
             <div className="ml-10 flex items-baseline space-x-4">
               {menuItems.map((item) =>
                 item.submenu && item.submenu.length > 0 ? (
-                  <div key={item.id} className="relative">
+                  <div key={item.id} className="relative" ref={item.submenu && openDropdown === item.id ? dropdownRef : null}> {/* Asignar ref dinámicamente */}
                     <button
                       type="button"
-                      className="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700 focus:outline-none flex items-center"
+                      className="menu-item-toggler px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700 focus:outline-none flex items-center" // Añadida clase menu-item-toggler
                       onClick={() => setOpenDropdown(openDropdown === item.id ? null : item.id)}
-                      onMouseEnter={() => setOpenDropdown(item.id)}
-                      onMouseLeave={() => setOpenDropdown(null)}
                     >
                       {item.name}
                       <svg className="ml-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -48,8 +90,7 @@ const Navbar = () => {
                     {openDropdown === item.id && (
                       <div
                         className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
-                        onMouseEnter={() => setOpenDropdown(item.id)} // Mantener abierto si el mouse entra al dropdown
-                        onMouseLeave={() => setOpenDropdown(null)} // Cerrar si el mouse sale del dropdown
+                        // onMouseEnter y onMouseLeave eliminados del div del dropdown
                       >
                         <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                           {item.submenu.map((subItem) => (
@@ -86,7 +127,7 @@ const Navbar = () => {
           {/* Menú de Perfil (Derecha) */}
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">
-              <div className="ml-3 relative">
+              <div className="ml-3 relative" ref={profileDropdownRef}> {/* Asignar ref al contenedor del dropdown de perfil */}
                 <div>
                   <button
                     type="button"
