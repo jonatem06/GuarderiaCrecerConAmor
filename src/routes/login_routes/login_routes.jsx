@@ -2,11 +2,13 @@
 import { Route } from 'react-router-dom'
 import Login from '../../modules/login/login'
 
-const LoginRoutes = () => (
-  <>
-    <Route path="/" element={<Login />} />
-    <Route path="*" element={<Login />} />
-  </>
-)
+function LoginRoutes(){
+  return(
+    <>
+      <Route path="/login" element={<Login />} />
+      <Route path="*" element={<Login />} />
+    </>
+  )
+}
 
 export default LoginRoutes

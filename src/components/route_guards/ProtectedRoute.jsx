@@ -1,5 +1,4 @@
 // src/components/RouteGuards/ProtectedRoute.jsx
-import { Navigate } from 'react-router-dom'
 
 const ProtectedRoute = ({ user, allowedRoles = [], allowedPermissions = [], children }) => {
   const hasRole = allowedRoles.length === 0 || allowedRoles.includes(user?.rol)
@@ -10,7 +9,7 @@ const ProtectedRoute = ({ user, allowedRoles = [], allowedPermissions = [], chil
     return children
   }
 
-  return <Navigate to="/unauthorized" replace />
+  //return <Navigate to="/" replace />
 }
 
 export default ProtectedRoute
