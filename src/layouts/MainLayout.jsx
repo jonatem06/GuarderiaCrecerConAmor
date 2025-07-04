@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types'; // Eliminado
 import Navbar from './components/Navbar'; // Importar Navbar
 
 const MainLayout = ({ children }) => {
@@ -19,8 +19,8 @@ const MainLayout = ({ children }) => {
   );
 };
 
-MainLayout.propTypes = {
-  children: PropTypes.node.isRequired,
-};
+// MainLayout.propTypes = { // Eliminado
+//   children: PropTypes.node.isRequired,
+// };
 
 export default MainLayout;
