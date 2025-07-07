@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react'; // useEffect y useRef importados
+import { useEffect, useRef, useState } from 'react'; // useEffect y useRef importados
 import { Link, useNavigate } from 'react-router-dom';
-import {  profileMenuItems } from '../menuConfig';
+import { menuItems, profileMenuItems } from '../menuConfig';
 
 const Navbar = () => {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
