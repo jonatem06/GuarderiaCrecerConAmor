@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react'; // useEffect y useRef importados
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { menuItems, profileMenuItems } from '../menuConfig';
+// Se elimina la importación de 'menuItems' de '../menuConfig'
+import { profileMenuItems } from '../menuConfig';
 
-const Navbar = () => {
+// Navbar ahora recibe 'menuItems' como prop
+const Navbar = ({ menuItems = [] }) => {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
   const navigate = useNavigate();
-  const dropdownRef = useRef(null); // Ref para el contenedor del dropdown principal
-  const profileDropdownRef = useRef(null); // Ref para el dropdown de perfil
+  const dropdownRef = useRef(null);
+  const profileDropdownRef = useRef(null);
 
-  // Hook para cerrar dropdowns si se hace clic fuera
   useEffect(() => {
     const handleClickOutside = (event) => {
       const targetElement = event.target;
