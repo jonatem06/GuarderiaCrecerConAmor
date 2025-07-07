@@ -37,16 +37,7 @@ const User = {
           icon: null,
         },
       ],
-    },
-    // Podríamos tener otro usuario con diferentes menús:
-    // const UserMaestro = {
-    //   rol: 'Maestro',
-    //   isLoggedIn: true,
-    //   navMenuItems: [
-    //     { id: 'dashboard', name: 'Mi Dashboard', path: '/dashboard' },
-    //     { id: 'maestros', name: 'Mis Alumnos', path: '/maestros/alumnos' },
-    //   ]
-    // };
+    }
   ]
 };
 
@@ -56,34 +47,11 @@ function RouteComponent() {
       <Routes>
         {/* Rutas que no usan MainLayout (como Login) */}
         {LoginRoutes()}
-
-        {/*
-          Para FinanzasRoutes y cualquier otra ruta modular que use MainLayout,
-          necesitamos pasarle los userMenuItems.
-          La forma más limpia sería que MainLayout siempre los reciba de su ruta padre.
-          FinanzasRoutes ahora debe ser modificado para que su 'Layout' prop (que es MainLayout)
-          reciba 'userMenuItems'.
-        */}
         {FinanzasRoutes({
           ProtectedRoute,
           User,
           Layout: (props) => <MainLayout userMenuItems={User.navMenuItems} {...props} />
         })}
-
-        {/* Ruta para el perfil del usuario */}
-        {/* Si /perfil usa MainLayout, también necesitaría userMenuItems */}
-        {/* <Route
-          path="/perfil"
-          element={
-            <ProtectedRoute user={User} allowedRoles={['Directora', 'Maestro', 'Admin']}>
-              <MainLayout>
-                <Perfil /> {}
-              </MainLayout>
-            </ProtectedRoute>
-          }
-        /> */}
-
-        {/* Otras rutas protegidas que usarán MainLayout */}
       </Routes>
     </BrowserRouter>
   );
