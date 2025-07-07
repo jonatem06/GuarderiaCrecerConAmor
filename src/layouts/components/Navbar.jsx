@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'; // useEffect y useRef importados
 import { Link, useNavigate } from 'react-router-dom';
-import { menuItems, profileMenuItems } from '../menuConfig';
+import {  profileMenuItems } from '../menuConfig';
 
 const Navbar = () => {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
@@ -66,8 +66,8 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo / App Name */}
           <div className="flex-shrink-0">
-            <Link to="/" className="text-xl font-bold">
-              Mi Aplicación
+            <Link to="/dashboard" className="text-xl font-bold">
+              Guarderia Crecer Con Amor
             </Link>
           </div>
 

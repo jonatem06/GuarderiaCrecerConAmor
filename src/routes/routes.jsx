@@ -9,7 +9,35 @@ import LoginRoutes from './login_routes/login_routes';
 const User = {
   isLoggedIn: true, // Añadir un indicador de si el usuario está logueado
   rol: 'Directora',
-  permisos: ['ver_reportes', 'editar_niños']
+  permisos: ['ver_reportes', 'editar_niños'],
+  menuItems:[
+    {
+      id: 'dashboard',
+      name: 'Dashboard',
+      path: '/dashboard', // Asumiendo que tienes una ruta para dashboard
+      icon: null, // Espacio para un futuro ícono
+    },
+    {
+      id: 'finanzas',
+      name: 'Finanzas',
+      icon: null,
+      path: null, // Un menú padre podría no tener una ruta directa si solo abre submenús
+      submenu: [
+        {
+          id: 'Reporte Gastos',
+          name: 'Reporte Gastos',
+          path: '/gastos',
+          icon: null,
+        },
+        {
+          id: 'alta_gastos',
+          name: 'Alta de Gastos',
+          path: '/AltaGastos',
+          icon: null,
+        }
+      ],
+    }
+  ]
 };
 
 function RouteComponent() {
