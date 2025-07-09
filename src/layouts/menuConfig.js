@@ -61,46 +61,6 @@ export const menuItems = [
       }
     ]
   }
-  // Ejemplo de cómo se podría estructurar un menú con submenús:
-  // {
-  //   id: 'reportes',
-  //   name: 'Reportes',
-  //   icon: null,
-  //   path: null, // Un menú padre podría no tener una ruta directa
-  //   submenu: [
-  //     {
-  //       id: 'reportes_ventas',
-  //       name: 'Reporte Ventas',
-  //       path: '/reportes/ventas',
-  //       icon: null,
-  //     },
-  //     {
-  //       id: 'reportes_alumnos',
-  //       name: 'Reporte Alumnos',
-  //       path: '/reportes/alumnos',
-  //       icon: null,
-  //     },
-  //   ],
-  // },
-  // {
-  //   id: 'configuracion',
-  //   name: 'Configuración',
-  //   icon: null,
-  //   submenu: [
-  //     {
-  //       id: 'config_general',
-  //       name: 'General',
-  //       path: '/configuracion/general',
-  //       icon: null,
-  //     },
-  //     {
-  //       id: 'config_usuarios',
-  //       name: 'Usuarios',
-  //       path: '/configuracion/usuarios',
-  //       icon: null,
-  //     }
-  //   ]
-  // }
 ];
 
 export const profileMenuItems = [
