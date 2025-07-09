@@ -1,9 +1,9 @@
-
+import FinanzasComponents from '../../components/finanzas/Finanzas';
 function Finanzas ()  {
   return (
-    <div>
-      hola
-    </div>
+    <>
+      <FinanzasComponents/>
+    </>
   );
 }
 

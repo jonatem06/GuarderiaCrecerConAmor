@@ -7,17 +7,36 @@ import LoginRoutes from './login_routes/login_routes';
 // import Perfil from '../modules/perfil/Perfil'; // Ejemplo
 
 const User = {
-  isLoggedIn: true, // Añadir un indicador de si el usuario está logueado
   rol: 'Directora',
   permisos: ['ver_reportes', 'editar_niños'],
   // navMenuItems se define aquí directamente para simulación.
   // En una aplicación real, esto vendría de una API o lógica de negocio basada en el rol/permisos.
   navMenuItems: [
     {
+      id: 'dashboard',
+      name: 'Dashboard',
+      path:'/dashboard',
+      icon: null,
+    },
+    {
       id: 'finanzas',
       name: 'Finanzas',
-      path: '/finanzas',
+      path: null,
       icon: null,
+      submenu: [
+        {
+          id: 'finanzas_gastos',
+          name: 'Gastos',
+          path:'/finanzas/gastos',
+          icon: null,
+        },
+        {
+          id: 'reporte',
+          name: 'Reporte de Gastos',
+          path:'/finanzas/ReporteGastos',
+          icon: null,
+        }
+      ]
     },
     {
       id: 'reportes',

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 // Se elimina la importación de 'menuItems' de '../menuConfig'
 import { profileMenuItems } from '../menuConfig';
@@ -67,8 +67,7 @@ const Navbar = ({ menuItems = [] }) => {
         <div className="flex items-center justify-between h-16">
           {/* Logo / App Name */}
           <div className="flex-shrink-0">
-            <Link to="/" className="text-xl font-bold">
-              Mi Aplicación
+            <Link to="/dashboard" className="text-xl font-bold">
             </Link>
           </div>
 
