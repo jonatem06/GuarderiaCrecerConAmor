@@ -7,34 +7,54 @@ import LoginRoutes from './login_routes/login_routes';
 // import Perfil from '../modules/perfil/Perfil'; // Ejemplo
 
 const User = {
-  isLoggedIn: true, // Añadir un indicador de si el usuario está logueado
   rol: 'Directora',
   permisos: ['ver_reportes', 'editar_niños'],
-  menuItems:[
+  // navMenuItems se define aquí directamente para simulación.
+  // En una aplicación real, esto vendría de una API o lógica de negocio basada en el rol/permisos.
+  navMenuItems: [
     {
       id: 'dashboard',
       name: 'Dashboard',
-      path: '/dashboard', // Asumiendo que tienes una ruta para dashboard
-      icon: null, // Espacio para un futuro ícono
+      path:'/dashboard',
+      icon: null,
     },
     {
       id: 'finanzas',
       name: 'Finanzas',
+      path: null,
       icon: null,
-      path: null, // Un menú padre podría no tener una ruta directa si solo abre submenús
       submenu: [
         {
-          id: 'Reporte Gastos',
-          name: 'Reporte Gastos',
-          path: '/gastos',
+          id: 'finanzas_gastos',
+          name: 'Gastos',
+          path:'/finanzas/gastos',
           icon: null,
         },
         {
-          id: 'alta_gastos',
-          name: 'Alta de Gastos',
-          path: '/AltaGastos',
+          id: 'reporte',
+          name: 'Reporte de Gastos',
+          path:'/finanzas/ReporteGastos',
           icon: null,
         }
+      ]
+    },
+    {
+      id: 'reportes',
+      name: 'Reportes (Directora)',
+      icon: null,
+      submenu: [
+        {
+          id: 'reportes_ventas',
+          name: 'Reporte Ventas',
+          path: '/reportes/ventas',
+          icon: null,
+        },
+        {
+          id: 'reportes_alumnos',
+          name: 'Reporte Alumnos',
+          path: '/reportes/alumnos',
+          icon: null,
+        },
       ],
     }
   ]
@@ -46,22 +66,11 @@ function RouteComponent() {
       <Routes>
         {/* Rutas que no usan MainLayout (como Login) */}
         {LoginRoutes()}
-
-        {FinanzasRoutes({ ProtectedRoute, User, Layout: MainLayout })}
-
-        {/* Ruta para el perfil del usuario */}
-        {/* <Route
-          path="/perfil"
-          element={
-            <ProtectedRoute user={User} allowedRoles={['Directora', 'Maestro', 'Admin']}>
-              <MainLayout>
-                <Perfil /> {}
-              </MainLayout>
-            </ProtectedRoute>
-          }
-        /> */}
-
-        {/* Otras rutas protegidas que usarán MainLayout */}
+        {FinanzasRoutes({
+          ProtectedRoute,
+          User,
+          Layout: (props) => <MainLayout userMenuItems={User.navMenuItems} {...props} />
+        })}
       </Routes>
     </BrowserRouter>
   );

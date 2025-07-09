@@ -6,7 +6,7 @@ function LoginRoutes(){
   return(
     <>
       <Route path="/login" element={<Login />} />
-      <Route path="*" element={<Login />} />
+      <Route path="*" element={<Login />} replace/>
     </>
   )
 }

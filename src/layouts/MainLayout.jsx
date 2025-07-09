@@ -1,12 +1,12 @@
 import React from 'react';
 // import PropTypes from 'prop-types'; // Eliminado
-import Navbar from './components/Navbar'; // Importar Navbar
+import Navbar from './components/Navbar';
 
-const MainLayout = ({ children }) => {
+const MainLayout = ({ children, userMenuItems }) => { // Se añade userMenuItems a las props
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar /> {/* Navbar agregado aquí */}
-      <main className="flex-grow bg-gray-100"> {/* flex-grow para que main ocupe el espacio restante */}
+      <Navbar menuItems={userMenuItems} /> {/* Se pasa userMenuItems al Navbar */}
+      <main className="flex-grow bg-gray-100">
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           {children}
         </div>
