@@ -8,18 +8,18 @@ import { profileMenuItems } from '../menuConfig';
 // Navbar ahora recibe 'menuItems' como prop
 const Navbar = ({ menuItems = [] }) => {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // Estado para el menú móvil
   const [openDropdown, setOpenDropdown] = useState(null);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
   const profileDropdownRef = useRef(null);
+  const mobileMenuRef = useRef(null); // Ref para el menú móvil
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       const targetElement = event.target;
 
       // Cerrar dropdown de menú principal
-      // Verifica si dropdownRef.current existe y si el clic fue fuera de él
-      // Y también que el clic no fue en un botón que togglea un menú (para permitir abrir otro menú)
       if (dropdownRef.current && !dropdownRef.current.contains(targetElement)) {
         let isToggler = false;
         const togglerButtons = document.querySelectorAll('.menu-item-toggler');
@@ -28,15 +28,12 @@ const Navbar = ({ menuItems = [] }) => {
             isToggler = true;
           }
         });
-        // Si el clic fue fuera del dropdown abierto Y no fue en un botón de toggle, entonces cierra.
         if (!isToggler) {
           setOpenDropdown(null);
         }
       }
 
       // Cerrar dropdown de perfil
-      // Verifica si profileDropdownRef.current existe, si el clic fue fuera de él,
-      // Y si el clic no fue en el botón que abre el menú de perfil.
       const profileMenuButton = document.getElementById('user-menu-button');
       if (profileDropdownRef.current &&
           !profileDropdownRef.current.contains(targetElement) &&
@@ -45,13 +42,23 @@ const Navbar = ({ menuItems = [] }) => {
         ) {
         setProfileMenuOpen(false);
       }
+
+      // Cerrar menú móvil
+      const mobileMenuButton = document.getElementById('mobile-menu-button');
+      if (mobileMenuRef.current &&
+          !mobileMenuRef.current.contains(targetElement) &&
+          mobileMenuButton &&
+          !mobileMenuButton.contains(targetElement)
+         ) {
+        setMobileMenuOpen(false);
+      }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [openDropdown, profileMenuOpen]); // Dependencias para re-ejecutar si cambian
+  }, [openDropdown, profileMenuOpen, mobileMenuOpen]);
 
 
   const handleLogout = () => {
@@ -190,17 +197,18 @@ const Navbar = ({ menuItems = [] }) => {
             <button
               type="button"
               className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              id="mobile-menu-button" // ID para el botón del menú móvil
               aria-controls="mobile-menu"
-              aria-expanded="false" // Se necesitará estado para esto si se implementa el menú móvil
-              // onClick={() => setMobileMenuOpen(!mobileMenuOpen)} // Placeholder
+              aria-expanded={mobileMenuOpen}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               <span className="sr-only">Open main menu</span>
-              {/* Icono de hamburguesa */}
-              <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              {/* Icono de hamburguesa, se muestra si mobileMenuOpen es false */}
+              <svg className={`${mobileMenuOpen ? 'hidden' : 'block'} h-6 w-6`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
-              {/* Icono de cierre (X) */}
-              <svg className="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              {/* Icono de cierre (X), se muestra si mobileMenuOpen es true */}
+              <svg className={`${mobileMenuOpen ? 'block' : 'hidden'} h-6 w-6`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
@@ -208,46 +216,92 @@ const Navbar = ({ menuItems = [] }) => {
         </div>
       </div>
 
-      {/* Menú Móvil (se muestra basado en estado, no implementado completamente aquí) */}
-      {/* <div className="md:hidden" id="mobile-menu">
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          {menuItems.map((item) => (
-            <Link
-              key={`mobile-${item.name}`}
-              to={item.path || '#'}
-              className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-            >
-              {item.name}
-            </Link>
-          ))}
-        </div>
-        <div className="pt-4 pb-3 border-t border-gray-700">
-          <div className="flex items-center px-5">
-            <div className="flex-shrink-0">
-              <img className="h-10 w-10 rounded-full" src={userProfileImageUrl} alt="" />
+      {/* Menú Móvil */}
+      {mobileMenuOpen && (
+        <div className="md:hidden" id="mobile-menu" ref={mobileMenuRef}>
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            {menuItems.map((item) => (
+              item.submenu && item.submenu.length > 0 ? (
+                <div key={`mobile-${item.id}`}>
+                  <button
+                    onClick={() => setOpenDropdown(openDropdown === item.id ? null : item.id)}
+                    className="w-full text-left text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                  >
+                    {item.name}
+                    <svg className={`inline-block ml-1 h-5 w-5 transform ${openDropdown === item.id ? 'rotate-180' : ''}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                  </button>
+                  {openDropdown === item.id && (
+                    <div className="pl-4">
+                      {item.submenu.map((subItem) => (
+                        <Link
+                          key={`mobile-${subItem.id}`}
+                          to={subItem.path || '#'}
+                          className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                          onClick={() => {
+                            setMobileMenuOpen(false);
+                            setOpenDropdown(null);
+                          }}
+                        >
+                          {subItem.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link
+                  key={`mobile-${item.id}`}
+                  to={item.path || '#'}
+                  className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              )
+            ))}
+          </div>
+          {/* Sección de perfil en menú móvil */}
+          <div className="pt-4 pb-3 border-t border-gray-700">
+            <div className="flex items-center px-5">
+              <div className="flex-shrink-0">
+                <img className="h-10 w-10 rounded-full" src={userProfileImageUrl} alt="User profile" />
+              </div>
+              <div className="ml-3">
+                {/* Estos datos deberían ser dinámicos si el usuario está logueado */}
+                <div className="text-base font-medium leading-none text-white">Usuario</div>
+                <div className="text-sm font-medium leading-none text-gray-400">usuario@example.com</div>
+              </div>
             </div>
-            <div className="ml-3">
-              <div className="text-base font-medium leading-none text-white">Tom Cook</div> Placeholder
-              <div className="text-sm font-medium leading-none text-gray-400">tom@example.com</div> Placeholder
+            <div className="mt-3 px-2 space-y-1">
+              {profileMenuItems.map((item) =>
+                item.action === 'logout' ? (
+                  <button
+                    key={`mobile-${item.id}`}
+                    onClick={() => {
+                      handleLogout();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
+                  >
+                    {item.name}
+                  </button>
+                ) : (
+                  <Link
+                    key={`mobile-${item.id}`}
+                    to={item.path}
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                )
+              )}
             </div>
           </div>
-          <div className="mt-3 px-2 space-y-1">
-            <Link
-              to="/perfil"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
-              onClick={() => setProfileMenuOpen(false)}
-            >
-              Mi Perfil
-            </Link>
-            <button
-              onClick={handleLogout}
-              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
-            >
-              Logout
-            </button>
-          </div>
         </div>
-      </div> */}
+      )}
     </nav>
   );
 };
