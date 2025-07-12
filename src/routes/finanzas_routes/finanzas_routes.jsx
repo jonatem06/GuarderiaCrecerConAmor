@@ -1,3 +1,4 @@
+import VerFinanzas from '../../modules/finanzas/VerFinanzas';
 import React from 'react'; // Importar React para React.Fragment
 import { Route } from 'react-router-dom';
 import Finanzas from '../../modules/finanzas/Finanzas';
@@ -9,6 +10,16 @@ function FinanzasRoutes({ ProtectedRoute, User, Layout }) {
 
   return (
     <>
+      <Route 
+        path="/finanzas/ver_finanzas" 
+        element={
+            <ProtectedRoute user={User} allowedRoles={['Directora']} allowedPermissions={['ver_gastos']}>
+              <RouteWrapper>
+                <VerFinanzas />
+              </RouteWrapper>
+            </ProtectedRoute>
+          } 
+        />
       <Route
         path="/finanzas"
         element={
@@ -19,19 +30,6 @@ function FinanzasRoutes({ ProtectedRoute, User, Layout }) {
           </ProtectedRoute>
         }
       />
-      {/* Aquí se podrían añadir más sub-rutas de finanzas que también usarían el RouteWrapper */}
-      {/* Ejemplo:
-      <Route
-        path="/finanzas/reportes"
-        element={
-          <ProtectedRoute user={User} allowedRoles={['Directora']}>
-            <RouteWrapper>
-              <ReportesFinanzas /> {}
-            </RouteWrapper>
-          </ProtectedRoute>
-        }
-      />
-      */}
     </>
   );
 }

@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes } from 'react-router-dom'; // Route importado
+import PadresRoutes from './padres_routes/padres_routes';
 import ProtectedRoute from '../components/route_guards/ProtectedRoute';
 import MainLayout from '../layouts/MainLayout'; // Importar MainLayout
 import FinanzasRoutes from './finanzas_routes/finanzas_routes';
@@ -85,6 +86,7 @@ function RouteComponent() {
   return (
     <BrowserRouter>
       <Routes>
+{PadresRoutes({          ProtectedRoute,          User,          Layout: (props) => <MainLayout userMenuItems={User.navMenuItems} {...props} />        })}
         {PersonalRoutes({
           ProtectedRoute,
           User,
