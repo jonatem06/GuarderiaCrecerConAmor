@@ -3,6 +3,7 @@ import ProtectedRoute from '../components/route_guards/ProtectedRoute';
 import MainLayout from '../layouts/MainLayout'; // Importar MainLayout
 import FinanzasRoutes from './finanzas_routes/finanzas_routes';
 import LoginRoutes from './login_routes/login_routes';
+import PersonalRoutes from './personal_routes/personal_routes';
 // Importar otros componentes de página que usarán MainLayout si es necesario
 // import Perfil from '../modules/perfil/Perfil'; // Ejemplo
 
@@ -39,6 +40,26 @@ const User = {
       ]
     },
     {
+      id: 'personal',
+      name: 'Personal',
+      path: null,
+      icon: null,
+      submenu: [
+        {
+          id: 'add_Personal',
+          name: 'Alta de personal',
+          path:'/Personal/alta',
+          icon: null,
+        },
+        {
+          id: 'get_personal',
+          name: 'Ver Personal',
+          path:'/Personal',
+          icon: null,
+        }
+      ]
+    },
+    {
       id: 'reportes',
       name: 'Reportes (Directora)',
       icon: null,
@@ -64,7 +85,11 @@ function RouteComponent() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Rutas que no usan MainLayout (como Login) */}
+        {PersonalRoutes({
+          ProtectedRoute,
+          User,
+          Layout: (props) => <MainLayout userMenuItems={User.navMenuItems} {...props} />
+        })}
         {LoginRoutes()}
         {FinanzasRoutes({
           ProtectedRoute,
