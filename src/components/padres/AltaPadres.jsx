@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Direccion from '../common/direccion';
 import InformacionContacto from '../common/informacion_contacto';
 import Persona from '../common/persona';
@@ -46,6 +46,13 @@ const UserSection = () => (
 const AlergiasSection = ({ alergias, onAddAlergia, onRemoveAlergia }) => {
     const [currentAlergia, setCurrentAlergia] = useState('');
     const availableAlergias = ['Polen', 'Nueces', 'Lacteos', 'Mariscos', 'Soja'];
+
+    useEffect(() => {
+        if (availableAlergias.includes(currentAlergia)) {
+            onAddAlergia(currentAlergia);
+            setCurrentAlergia('');
+        }
+    }, [currentAlergia]);
 
     const handleAdd = () => {
         if (currentAlergia) {
