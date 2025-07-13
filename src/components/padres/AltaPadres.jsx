@@ -93,15 +93,24 @@ const AltaPadres = ({ isOpen, onClose }) => {
 
     const addAlergiaToHijo = (hijoIndex, alergia) => {
         if (alergia && !hijos[hijoIndex].alergias.includes(alergia)) {
-            const newHijos = [...hijos];
-            newHijos[hijoIndex].alergias.push(alergia);
+            const newHijos = hijos.map((hijo, index) => {
+                if (index === hijoIndex) {
+                    return { ...hijo, alergias: [...hijo.alergias, alergia] };
+                }
+                return hijo;
+            });
             setHijos(newHijos);
         }
     };
 
     const removeAlergiaFromHijo = (hijoIndex, alergiaIndex) => {
-        const newHijos = [...hijos];
-        newHijos[hijoIndex].alergias.splice(alergiaIndex, 1);
+        const newHijos = hijos.map((hijo, index) => {
+            if (index === hijoIndex) {
+                const nuevasAlergias = hijo.alergias.filter((_, i) => i !== alergiaIndex);
+                return { ...hijo, alergias: nuevasAlergias };
+            }
+            return hijo;
+        });
         setHijos(newHijos);
     };
 
