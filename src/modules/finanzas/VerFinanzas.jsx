@@ -1,4 +1,4 @@
-import VerFinanzasComponents from '../../components/finanzas/VerFinanzas';
+import VerFinanzasComponents from '../../components/ver_finanzas/VerFinanzas';
 function VerFinanzas ()  {
   return (
     <>
