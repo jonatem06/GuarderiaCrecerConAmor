@@ -47,7 +47,16 @@ const UserSection = () => {
 
 
 const AltaPadres = ({ isOpen, onClose }) => {
-  const [openSection, setOpenSection] = useState('usuario');
+  const [openSections, setOpenSections] = useState({
+    usuario: true,
+    papa: false,
+    mama: false,
+    hijos: false,
+    direccion: false,
+    alergias: false,
+    permitidas: false,
+    noPermitidas: false,
+  });
 
   const [hijos, setHijos] = useState([{}]);
   const [allowedPersons, setAllowedPersons] = useState([{}]);
@@ -78,101 +87,109 @@ const AltaPadres = ({ isOpen, onClose }) => {
   };
 
   const toggleSection = (section) => {
-    setOpenSection(openSection === section ? null : section);
+    setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
   };
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 p-4">
-      <div className="relative top-10 mx-auto border w-full max-w-lg md:max-w-2xl lg:max-w-4xl shadow-lg rounded-md bg-white">
+      <div className="relative top-10 mx-auto border w-full max-w-lg md:max-w-2xl lg:max-w-6xl shadow-lg rounded-md bg-white">
         <div className="flex justify-between items-center mb-4 p-4 border-b">
             <h2 className="text-2xl font-bold">Alta de Padres</h2>
             <button onClick={onClose} className="text-black text-2xl">&times;</button>
         </div>
         <div className="max-h-[75vh] overflow-y-auto p-4">
-            <AccordionSection title="Usuario" isOpen={openSection === 'usuario'} setIsOpen={() => toggleSection('usuario')}>
-              <UserSection />
-            </AccordionSection>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8">
+            {/* Columna Izquierda */}
+            <div>
+              <AccordionSection title="Usuario" isOpen={openSections.usuario} setIsOpen={() => toggleSection('usuario')}>
+                <UserSection />
+              </AccordionSection>
 
-            <AccordionSection title="Papá" isOpen={openSection === 'papa'} setIsOpen={() => toggleSection('papa')}>
-              <Persona />
-              <InformacionContacto />
-            </AccordionSection>
+              <AccordionSection title="Papá" isOpen={openSections.papa} setIsOpen={() => toggleSection('papa')}>
+                <Persona />
+                <InformacionContacto />
+              </AccordionSection>
 
-            <AccordionSection title="Mamá" isOpen={openSection === 'mama'} setIsOpen={() => toggleSection('mama')}>
-              <Persona />
-              <InformacionContacto />
-            </AccordionSection>
+              <AccordionSection title="Mamá" isOpen={openSections.mama} setIsOpen={() => toggleSection('mama')}>
+                <Persona />
+                <InformacionContacto />
+              </AccordionSection>
 
-            <AccordionSection title="Hijo(s)" isOpen={openSection === 'hijos'} setIsOpen={() => toggleSection('hijos')}>
-              {hijos.map((_, index) => (
-                  <div key={index} className="relative mb-4 p-4 border rounded">
-                  <Persona />
-                  {hijos.length > 1 && (
-                      <button onClick={() => removeHijo(index)} className="absolute top-2 right-2 text-red-500">
-                      Eliminar
-                      </button>
-                  )}
-                  </div>
-              ))}
-              <button onClick={addHijo} className="text-blue-500">+ Añadir Hijo</button>
-            </AccordionSection>
+              <AccordionSection title="Hijo(s)" isOpen={openSections.hijos} setIsOpen={() => toggleSection('hijos')}>
+                {hijos.map((_, index) => (
+                    <div key={index} className="relative mb-4 p-4 border rounded">
+                    <Persona />
+                    {hijos.length > 1 && (
+                        <button onClick={() => removeHijo(index)} className="absolute top-2 right-2 text-red-500">
+                        Eliminar
+                        </button>
+                    )}
+                    </div>
+                ))}
+                <button onClick={addHijo} className="text-blue-500">+ Añadir Hijo</button>
+              </AccordionSection>
+            </div>
 
-            <AccordionSection title="Dirección" isOpen={openSection === 'direccion'} setIsOpen={() => toggleSection('direccion')}>
-              <Direccion />
-            </AccordionSection>
+            {/* Columna Derecha */}
+            <div>
+              <AccordionSection title="Dirección" isOpen={openSections.direccion} setIsOpen={() => toggleSection('direccion')}>
+                <Direccion />
+              </AccordionSection>
 
-            <AccordionSection title="Alergias" isOpen={openSection === 'alergias'} setIsOpen={() => toggleSection('alergias')}>
-              <div className="flex items-center gap-2 mb-4">
-                  <input
-                  list="alergias-list"
-                  value={currentAlergia}
-                  onChange={(e) => setCurrentAlergia(e.target.value)}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  />
-                  <datalist id="alergias-list">
-                  {availableAlergias.map(alergia => <option key={alergia} value={alergia} />)}
-                  </datalist>
-                  <button onClick={addAlergia} className="bg-blue-500 text-white py-2 px-4 rounded">Agregar</button>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                  {alergias.map(alergia => (
-                  <div key={alergia} className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 flex items-center">
-                      {alergia}
-                      <button onClick={() => removeAlergia(alergia)} className="ml-2 text-red-500">x</button>
-                  </div>
-                  ))}
-              </div>
-            </AccordionSection>
+              <AccordionSection title="Alergias" isOpen={openSections.alergias} setIsOpen={() => toggleSection('alergias')}>
+                <div className="flex items-center gap-2 mb-4">
+                    <input
+                    list="alergias-list"
+                    value={currentAlergia}
+                    onChange={(e) => setCurrentAlergia(e.target.value)}
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    />
+                    <datalist id="alergias-list">
+                    {availableAlergias.map(alergia => <option key={alergia} value={alergia} />)}
+                    </datalist>
+                    <button onClick={addAlergia} className="bg-blue-500 text-white py-2 px-4 rounded">Agregar</button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                    {alergias.map(alergia => (
+                    <div key={alergia} className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 flex items-center">
+                        {alergia}
+                        <button onClick={() => removeAlergia(alergia)} className="ml-2 text-red-500">x</button>
+                    </div>
+                    ))}
+                </div>
+              </AccordionSection>
 
-            <AccordionSection title="Personas permitidas para buscar al hijo" isOpen={openSection === 'permitidas'} setIsOpen={() => toggleSection('permitidas')}>
-              {allowedPersons.map((_, index) => (
-                  <div key={index} className="relative mb-4 p-4 border rounded">
-                  <Persona />
-                  {allowedPersons.length > 1 && (
-                  <button onClick={() => removeAllowedPerson(index)} className="absolute top-2 right-2 text-red-500">
-                      Eliminar
-                  </button>
-                  )}
-                  </div>
-              ))}
-              <button onClick={addAllowedPerson} className="text-blue-500">+ Añadir Persona</button>
-            </AccordionSection>
+              <AccordionSection title="Personas permitidas para buscar al hijo" isOpen={openSections.permitidas} setIsOpen={() => toggleSection('permitidas')}>
+                {allowedPersons.map((_, index) => (
+                    <div key={index} className="relative mb-4 p-4 border rounded">
+                    <Persona />
+                    {allowedPersons.length > 1 && (
+                    <button onClick={() => removeAllowedPerson(index)} className="absolute top-2 right-2 text-red-500">
+                        Eliminar
+                    </button>
+                    )}
+                    </div>
+                ))}
+                <button onClick={addAllowedPerson} className="text-blue-500">+ Añadir Persona</button>
+              </AccordionSection>
 
-            <AccordionSection title="Personas que no están permitidas a buscar al hijo" isOpen={openSection === 'no-permitidas'} setIsOpen={() => toggleSection('no-permitidas')}>
-              {notAllowedPersons.map((_, index) => (
-                  <div key={index} className="relative mb-4 p-4 border rounded">
-                  <Persona />
-                  {notAllowedPersons.length > 1 && (
-                  <button onClick={() => removeNotAllowedPerson(index)} className="absolute top-2 right-2 text-red-500">
-                      Eliminar
-                  </button>
-                  )}
-                  </div>
-              ))}
-              <button onClick={addNotAllowedPerson} className="text-blue-500">+ Añadir Persona</button>
-            </AccordionSection>
+              <AccordionSection title="Personas que no están permitidas a buscar al hijo" isOpen={openSections.noPermitidas} setIsOpen={() => toggleSection('noPermitidas')}>
+                {notAllowedPersons.map((_, index) => (
+                    <div key={index} className="relative mb-4 p-4 border rounded">
+                    <Persona />
+                    {notAllowedPersons.length > 1 && (
+                    <button onClick={() => removeNotAllowedPerson(index)} className="absolute top-2 right-2 text-red-500">
+                        Eliminar
+                    </button>
+                    )}
+                    </div>
+                ))}
+                <button onClick={addNotAllowedPerson} className="text-blue-500">+ Añadir Persona</button>
+              </AccordionSection>
+            </div>
+          </div>
         </div>
         <div className="flex justify-end mt-4 p-4 border-t">
             <button onClick={onClose} className="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded mr-2">
