@@ -48,8 +48,10 @@ const AlergiasSection = ({ alergias, onAddAlergia, onRemoveAlergia }) => {
     const availableAlergias = ['Polen', 'Nueces', 'Lacteos', 'Mariscos', 'Soja'];
 
     const handleAdd = () => {
-        onAddAlergia(currentAlergia);
-        setCurrentAlergia('');
+        if (currentAlergia) {
+            onAddAlergia(currentAlergia);
+            setCurrentAlergia('');
+        }
     };
 
     return (
@@ -67,7 +69,7 @@ const AlergiasSection = ({ alergias, onAddAlergia, onRemoveAlergia }) => {
                 <button type="button" onClick={handleAdd} className="bg-blue-500 text-white py-2 px-4 rounded">Agregar</button>
             </div>
             <div className="flex flex-wrap gap-2">
-                {alergias.map((alergia, index) => (
+                {alergias && alergias.map((alergia, index) => (
                     <div key={index} className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 flex items-center">
                         {alergia}
                         <button type="button" onClick={() => onRemoveAlergia(index)} className="ml-2 text-red-500">x</button>
