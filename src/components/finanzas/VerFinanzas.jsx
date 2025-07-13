@@ -1,116 +1,111 @@
-import React, { useState, useRef } from 'react'; // Añadido useRef
-
-// El contenido de FormularioGasto.jsx se integra aquí.
-// Ya no se importa FormularioGasto.
+import React, { useState } from 'react';
+import Finanzas from './Finanzas'; // Asegúrate de que la ruta de importación sea correcta
 
 const VerFinanzas = () => {
-  // Lógica y estado del formulario (antes en FormularioGasto.jsx)
-  const [gasto, setGasto] = useState('');
-  const [tipoGasto, setTipoGasto] = useState('mantenimiento');
-  const [fecha, setFecha] = useState('');
+  // Estado para controlar la visibilidad del modal
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log({
-      gasto,
-      tipoGasto,
-      fecha,
-    });
-    // Resetear formulario opcionalmente
-    // setGasto('');
-    // setTipoGasto('mantenimiento');
-    // setFecha('');
+  // Datos de ejemplo para la tabla de totales
+  const totales = {
+    mantenimiento: 500,
+    compras: 1200,
+    despensa: 300,
+    operativos: 800,
+    salarios: 5000,
+    ganancias: 2000,
   };
 
-  const dateInputRef = useRef(null); // Cambiado React.useRef a useRef
+  // Datos de ejemplo para la tabla de gastos completos
+  const gastosCompletos = [
+    { id: 1, gasto: 'Reparación de tubería', tipo: 'mantenimiento', fecha: '2024-01-15' },
+    { id: 2, gasto: 'Compra de papelería', tipo: 'compras', fecha: '2024-01-16' },
+    { id: 3, gasto: 'Frutas y verduras', tipo: 'despensa', fecha: '2024-01-17' },
+    { id: 4, gasto: 'Pago de luz', tipo: 'operativos', fecha: '2024-01-18' },
+    { id: 5, gasto: 'Salario Juan', tipo: 'salarios', fecha: '2024-01-19' },
+  ];
 
-  const handleDateContainerClick = () => {
-    if (dateInputRef.current) {
-      dateInputRef.current.focus();
-      if (typeof dateInputRef.current.showPicker === 'function') {
-        dateInputRef.current.showPicker();
-      }
-    }
-  };
-
-  // JSX del formulario (antes en FormularioGasto.jsx)
-  // con ajustes para el ancho y centrado en escritorio
   return (
-    // Contenedor principal de la página/sección VerFinanzas
-    // El div interior es el que controla el tamaño y centrado del formulario.
     <div className="container mx-auto px-4 py-8">
-      {/* Se elimina el div que era <div className="container mx-auto p-4"> de FormularioGasto */}
-      {/* El form ahora tendrá las clases de centrado y tamaño */}
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 md:w-1/2 md:mx-auto"
-      >
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-700">Registrar Gasto</h2>
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">Resumen Financiero</h1>
 
-        {/* Campo Gasto */}
+      {/* Tabla de Totales */}
+      <div className="mb-8">
+        <h2 className="text-2xl font-semibold mb-4 text-gray-700">Totales por Categoría</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {Object.entries(totales).map(([key, value]) => (
+            <div key={key} className="bg-white p-4 rounded-lg shadow">
+              <h3 className="text-lg font-bold capitalize text-gray-600">{key.replace('_', ' ')}</h3>
+              <p className="text-2xl font-semibold text-gray-800">${value.toLocaleString()}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Botón para abrir modal y Tabla de Gastos Completos */}
+      <div>
+        <h2 className="text-2xl font-semibold mb-4 text-gray-700">Detalle de Gastos</h2>
         <div className="mb-4">
-          <label htmlFor="gasto" className="block text-gray-700 text-sm font-bold mb-2">
-            Monto del Gasto:
-          </label>
-          <input
-            type="number"
-            id="gasto"
-            value={gasto}
-            onChange={(e) => setGasto(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Ej: 150.00"
-            required
-          />
-        </div>
-
-        {/* Campo Tipo de Gasto */}
-        <div className="mb-4">
-          <label htmlFor="tipoGasto" className="block text-gray-700 text-sm font-bold mb-2">
-            Tipo de Gasto:
-          </label>
-          <select
-            id="tipoGasto"
-            value={tipoGasto}
-            onChange={(e) => setTipoGasto(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            required
-          >
-            <option value="mantenimiento">Mantenimiento</option>
-            <option value="compras">Compras</option>
-            <option value="despensa">Despensa</option>
-            <option value="operativo">Operativo</option>
-          </select>
-        </div>
-
-        {/* Campo Fecha */}
-        <div className="mb-6 cursor-pointer" onClick={handleDateContainerClick}>
-          <label htmlFor="fecha" className="block text-gray-700 text-sm font-bold mb-2 pointer-events-none">
-            Fecha del Gasto:
-          </label>
-          <input
-            type="date"
-            id="fecha"
-            ref={dateInputRef}
-            value={fecha}
-            onChange={(e) => setFecha(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            required
-          />
-        </div>
-
-        {/* Botón Guardar */}
-        <div className="flex items-center justify-center">
           <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
+            onClick={() => setModalOpen(true)}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
-            Guardar Gasto
+            Agregar Nuevo Gasto
           </button>
         </div>
-      </form>
-      {/* Aquí se podrían añadir otros componentes relacionados con ver_finanzas si fuera necesario */}
+        <div className="overflow-x-auto bg-white rounded-lg shadow">
+          <table className="min-w-full leading-normal">
+            <thead>
+              <tr>
+                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Gasto
+                </th>
+                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Tipo de Gasto
+                </th>
+                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Fecha del Gasto
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {gastosCompletos.map((gasto) => (
+                <tr key={gasto.id}>
+                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                    <p className="text-gray-900 whitespace-no-wrap">{gasto.gasto}</p>
+                  </td>
+                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                    <p className="text-gray-900 whitespace-no-wrap capitalize">{gasto.tipo}</p>
+                  </td>
+                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                    <p className="text-gray-900 whitespace-no-wrap">{gasto.fecha}</p>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Modal para Agregar Nuevo Gasto */}
+      {modalOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div className="relative top-20 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white">
+            <div className="mt-3 text-center">
+              <div className="flex justify-between items-center pb-3">
+                <p className="text-2xl font-bold">Agregar Nuevo Gasto</p>
+                <div className="cursor-pointer z-50" onClick={() => setModalOpen(false)}>
+                  <svg className="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                    <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"/>
+                  </svg>
+                </div>
+              </div>
+              <Finanzas />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default VerFinanzas;
