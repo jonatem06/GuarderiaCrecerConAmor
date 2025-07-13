@@ -1,4 +1,4 @@
-import VerPersonalComponents from '../../components/ver_personal/VerPersonal';
+import VerPersonalComponents from '../../components/personal/VerPersonal';
 function VerPersonal ()  {
   return (
     <>
