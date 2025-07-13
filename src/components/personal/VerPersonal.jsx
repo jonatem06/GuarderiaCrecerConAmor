@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import AltaPersonal from './AltaPersonal'; // Asegúrate de que la ruta de importación sea correcta
 
 const VerPersonal = () => {
@@ -24,7 +24,7 @@ const VerPersonal = () => {
     return (
         <div className="container mx-auto px-4 py-8">
             <h1 className="text-2xl font-bold mb-4 text-textoPrincipal">Personal Registrado</h1>
-            <button onClick={() => handleOpenModal(null)} className="mb-4 bg-primario hover:bg-acento text-black font-bold py-2 px-4 rounded justify-end">
+            <button onClick={() => handleOpenModal(null)} className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded justify-end">
                 Agregar Personal
             </button>
             <div className="shadow-lg rounded-lg overflow-hidden">
