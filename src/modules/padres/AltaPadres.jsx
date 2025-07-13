@@ -1,4 +1,4 @@
-import AltaPadresComponents from '../../components/alta_padres/AltaPadres';
+import AltaPadresComponents from '../../components/padres/AltaPadres';
 function AltaPadres ()  {
   return (
     <>
