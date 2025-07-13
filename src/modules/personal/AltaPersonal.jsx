@@ -1,4 +1,4 @@
-import AltaPersonalComponents from '../../components/personal/AltaPersonal';
+import AltaPersonalComponents from '../../components/alta_personal/AltaPersonal';
 function AltaPersonal ()  {
   return (
     <>
