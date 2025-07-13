@@ -1,5 +1,5 @@
 import PadresComponents from '../../components/padres/Padres';
-function Padres ()  {
+function VerPadres ()  {
   return (
     <>
       <PadresComponents/>
@@ -7,4 +7,4 @@ function Padres ()  {
   );
 }
 
-export default Padres;
+export default VerPadres;

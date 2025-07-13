@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes } from 'react-router-dom'; // Route importado
-import PadresRoutes from './padres_routes/padres_routes';
 import ProtectedRoute from '../components/route_guards/ProtectedRoute';
 import MainLayout from '../layouts/MainLayout'; // Importar MainLayout
 import FinanzasRoutes from './finanzas_routes/finanzas_routes';
 import LoginRoutes from './login_routes/login_routes';
+import PadresRoutes from './padres_routes/padres_routes';
 import PersonalRoutes from './personal_routes/personal_routes';
 // Importar otros componentes de página que usarán MainLayout si es necesario
 // import Perfil from '../modules/perfil/Perfil'; // Ejemplo
@@ -22,62 +22,36 @@ const User = {
     },
     {
       id: 'finanzas',
-      name: 'Finanzas',
-      path: null,
+      name: 'Reporte Finanzas',
+      path: '/finanzas/ver_finanzas',
       icon: null,
-      submenu: [
-        {
-          id: 'finanzas_gastos',
-          name: 'Gastos',
-          path:'/finanzas/gastos',
-          icon: null,
-        },
-        {
-          id: 'reporte',
-          name: 'Reporte de Gastos',
-          path:'/finanzas/ReporteGastos',
-          icon: null,
-        }
-      ]
     },
     {
       id: 'personal',
-      name: 'Personal',
+      name: 'Ver personal',
+      path: '/personal/ver_personal',
+      icon: null
+    }
+    ,
+    {
+      id: 'padres',
+      name: 'Padres',
       path: null,
       icon: null,
-      submenu: [
+      submenu:[
         {
-          id: 'add_Personal',
-          name: 'Alta de personal',
-          path:'/Personal/alta',
-          icon: null,
+          id: 'ver_padres',
+          name: 'Ver Padres',
+          path: '/padres/ver_padres',
+          icon: null
         },
         {
-          id: 'get_personal',
-          name: 'Ver Personal',
-          path:'/Personal',
-          icon: null,
+          id: 'ver_reportes',
+          name: 'Ver reportes',
+          path: '/reportes/ver_reportes',
+          icon: null
         }
       ]
-    },
-    {
-      id: 'reportes',
-      name: 'Reportes (Directora)',
-      icon: null,
-      submenu: [
-        {
-          id: 'reportes_ventas',
-          name: 'Reporte Ventas',
-          path: '/reportes/ventas',
-          icon: null,
-        },
-        {
-          id: 'reportes_alumnos',
-          name: 'Reporte Alumnos',
-          path: '/reportes/alumnos',
-          icon: null,
-        },
-      ],
     }
   ]
 };

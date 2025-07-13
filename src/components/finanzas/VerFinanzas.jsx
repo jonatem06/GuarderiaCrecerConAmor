@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Finanzas from './Finanzas'; // Asegúrate de que la ruta de importación sea correcta
 
 const VerFinanzas = () => {
@@ -17,11 +17,11 @@ const VerFinanzas = () => {
 
   // Datos de ejemplo para la tabla de gastos completos
   const gastosCompletos = [
-    { id: 1, gasto: 'Reparación de tubería', tipo: 'mantenimiento', fecha: '2024-01-15' },
-    { id: 2, gasto: 'Compra de papelería', tipo: 'compras', fecha: '2024-01-16' },
-    { id: 3, gasto: 'Frutas y verduras', tipo: 'despensa', fecha: '2024-01-17' },
-    { id: 4, gasto: 'Pago de luz', tipo: 'operativos', fecha: '2024-01-18' },
-    { id: 5, gasto: 'Salario Juan', tipo: 'salarios', fecha: '2024-01-19' },
+    { id: 1, gasto: 'Reparación de tubería', tipo: 'mantenimiento',costo:500, fecha: '2024-01-15' },
+    { id: 2, gasto: 'Compra de papelería', tipo: 'compras',costo:500, fecha: '2024-01-16' },
+    { id: 3, gasto: 'Frutas y verduras', tipo: 'despensa',costo:500, fecha: '2024-01-17' },
+    { id: 4, gasto: 'Pago de luz', tipo: 'operativos',costo:500, fecha: '2024-01-18' },
+    { id: 5, gasto: 'Salario Juan', tipo: 'salarios',costo:500, fecha: '2024-01-19' },
   ];
 
   return (
@@ -63,6 +63,9 @@ const VerFinanzas = () => {
                   Tipo de Gasto
                 </th>
                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Costo
+                </th>
+                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                   Fecha del Gasto
                 </th>
               </tr>
@@ -75,6 +78,9 @@ const VerFinanzas = () => {
                   </td>
                   <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                     <p className="text-gray-900 whitespace-no-wrap capitalize">{gasto.tipo}</p>
+                  </td>
+                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                    <p className="text-gray-900 whitespace-no-wrap capitalize">{gasto.costo}</p>
                   </td>
                   <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                     <p className="text-gray-900 whitespace-no-wrap">{gasto.fecha}</p>
