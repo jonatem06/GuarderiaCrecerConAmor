@@ -1,116 +1,158 @@
-import React, { useState, useRef } from 'react'; // Añadido useRef
+import React, { useState } from 'react';
+import Direccion from '../common/direccion';
+import InformacionContacto from '../common/informacion_contacto';
+import Persona from '../common/persona';
 
-// El contenido de FormularioGasto.jsx se integra aquí.
-// Ya no se importa FormularioGasto.
+const AccordionSection = ({ title, children, isOpen, setIsOpen }) => (
+  <div className="border-b">
+    <button
+      onClick={() => setIsOpen(!isOpen)}
+      className="w-full text-left py-4 px-6 focus:outline-none"
+    >
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-bold">{title}</h2>
+        <span>{isOpen ? '-' : '+'}</span>
+      </div>
+    </button>
+    {isOpen && <div className="px-6 pb-4">{children}</div>}
+  </div>
+);
 
-const AltaPadres = () => {
-  // Lógica y estado del formulario (antes en FormularioGasto.jsx)
-  const [gasto, setGasto] = useState('');
-  const [tipoGasto, setTipoGasto] = useState('mantenimiento');
-  const [fecha, setFecha] = useState('');
+const AltaPadres = ({ isOpen, onClose }) => {
+  const [openSection, setOpenSection] = useState(null);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log({
-      gasto,
-      tipoGasto,
-      fecha,
-    });
-    // Resetear formulario opcionalmente
-    // setGasto('');
-    // setTipoGasto('mantenimiento');
-    // setFecha('');
-  };
+  const [hijos, setHijos] = useState([{}]);
+  const [allowedPersons, setAllowedPersons] = useState([{}]);
+  const [notAllowedPersons, setNotAllowedPersons] = useState([{}]);
 
-  const dateInputRef = useRef(null); // Cambiado React.useRef a useRef
+  const [alergias, setAlergias] = useState([]);
+  const [currentAlergia, setCurrentAlergia] = useState('');
 
-  const handleDateContainerClick = () => {
-    if (dateInputRef.current) {
-      dateInputRef.current.focus();
-      if (typeof dateInputRef.current.showPicker === 'function') {
-        dateInputRef.current.showPicker();
-      }
+  const availableAlergias = ['Polen', 'Nueces', 'Lacteos', 'Mariscos', 'Soja'];
+
+  const addHijo = () => setHijos([...hijos, {}]);
+  const removeHijo = (index) => setHijos(hijos.filter((_, i) => i !== index));
+
+  const addAllowedPerson = () => setAllowedPersons([...allowedPersons, {}]);
+  const removeAllowedPerson = (index) => setAllowedPersons(allowedPersons.filter((_, i) => i !== index));
+
+  const addNotAllowedPerson = () => setNotAllowedPersons([...notAllowedPersons, {}]);
+  const removeNotAllowedPerson = (index) => setNotAllowedPersons(notAllowedPersons.filter((_, i) => i !== index));
+
+  const addAlergia = () => {
+    if (currentAlergia && !alergias.includes(currentAlergia)) {
+      setAlergias([...alergias, currentAlergia]);
+      setCurrentAlergia('');
     }
   };
+  const removeAlergia = (alergiaToRemove) => {
+    setAlergias(alergias.filter(alergia => alergia !== alergiaToRemove));
+  };
 
-  // JSX del formulario (antes en FormularioGasto.jsx)
-  // con ajustes para el ancho y centrado en escritorio
+  const toggleSection = (section) => {
+    setOpenSection(openSection === section ? null : section);
+  };
+
+  if (!isOpen) return null;
+
   return (
-    // Contenedor principal de la página/sección AltaPadres
-    // El div interior es el que controla el tamaño y centrado del formulario.
-    <div className="container mx-auto px-4 py-8">
-      {/* Se elimina el div que era <div className="container mx-auto p-4"> de FormularioGasto */}
-      {/* El form ahora tendrá las clases de centrado y tamaño */}
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 md:w-1/2 md:mx-auto"
-      >
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-700">Registrar Gasto</h2>
-
-        {/* Campo Gasto */}
-        <div className="mb-4">
-          <label htmlFor="gasto" className="block text-gray-700 text-sm font-bold mb-2">
-            Monto del Gasto:
-          </label>
-          <input
-            type="number"
-            id="gasto"
-            value={gasto}
-            onChange={(e) => setGasto(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Ej: 150.00"
-            required
-          />
+    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+      <div className="relative top-20 mx-auto p-5 border w-full max-w-4xl shadow-lg rounded-md bg-white">
+        <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-bold">Alta de Padres</h2>
+            <button onClick={onClose} className="text-black">&times;</button>
         </div>
+        <div className="max-h-[70vh] overflow-y-auto">
+            <AccordionSection title="Papá" isOpen={openSection === 'papa'} setIsOpen={() => toggleSection('papa')}>
+            <Persona />
+            <InformacionContacto />
+            </AccordionSection>
 
-        {/* Campo Tipo de Gasto */}
-        <div className="mb-4">
-          <label htmlFor="tipoGasto" className="block text-gray-700 text-sm font-bold mb-2">
-            Tipo de Gasto:
-          </label>
-          <select
-            id="tipoGasto"
-            value={tipoGasto}
-            onChange={(e) => setTipoGasto(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            required
-          >
-            <option value="mantenimiento">Mantenimiento</option>
-            <option value="compras">Compras</option>
-            <option value="despensa">Despensa</option>
-            <option value="operativo">Operativo</option>
-          </select>
-        </div>
+            <AccordionSection title="Mamá" isOpen={openSection === 'mama'} setIsOpen={() => toggleSection('mama')}>
+            <Persona />
+            <InformacionContacto />
+            </AccordionSection>
 
-        {/* Campo Fecha */}
-        <div className="mb-6 cursor-pointer" onClick={handleDateContainerClick}>
-          <label htmlFor="fecha" className="block text-gray-700 text-sm font-bold mb-2 pointer-events-none">
-            Fecha del Gasto:
-          </label>
-          <input
-            type="date"
-            id="fecha"
-            ref={dateInputRef}
-            value={fecha}
-            onChange={(e) => setFecha(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            required
-          />
-        </div>
+            <AccordionSection title="Hijo(s)" isOpen={openSection === 'hijos'} setIsOpen={() => toggleSection('hijos')}>
+            {hijos.map((_, index) => (
+                <div key={index} className="relative mb-4 p-4 border rounded">
+                <Persona />
+                {hijos.length > 1 && (
+                    <button onClick={() => removeHijo(index)} className="absolute top-2 right-2 text-red-500">
+                    Eliminar
+                    </button>
+                )}
+                </div>
+            ))}
+            <button onClick={addHijo} className="text-blue-500">+ Añadir Hijo</button>
+            </AccordionSection>
 
-        {/* Botón Guardar */}
-        <div className="flex items-center justify-center">
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
-          >
-            Guardar Gasto
-          </button>
+            <AccordionSection title="Dirección" isOpen={openSection === 'direccion'} setIsOpen={() => toggleSection('direccion')}>
+            <Direccion />
+            </AccordionSection>
+
+            <AccordionSection title="Alergias" isOpen={openSection === 'alergias'} setIsOpen={() => toggleSection('alergias')}>
+            <div className="flex items-center gap-2 mb-4">
+                <input
+                list="alergias-list"
+                value={currentAlergia}
+                onChange={(e) => setCurrentAlergia(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                />
+                <datalist id="alergias-list">
+                {availableAlergias.map(alergia => <option key={alergia} value={alergia} />)}
+                </datalist>
+                <button onClick={addAlergia} className="bg-blue-500 text-white py-2 px-4 rounded">Agregar</button>
+            </div>
+            <div className="flex flex-wrap gap-2">
+                {alergias.map(alergia => (
+                <div key={alergia} className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 flex items-center">
+                    {alergia}
+                    <button onClick={() => removeAlergia(alergia)} className="ml-2 text-red-500">x</button>
+                </div>
+                ))}
+            </div>
+            </AccordionSection>
+
+            <AccordionSection title="Personas permitidas para buscar al hijo" isOpen={openSection === 'permitidas'} setIsOpen={() => toggleSection('permitidas')}>
+            {allowedPersons.map((_, index) => (
+                <div key={index} className="relative mb-4 p-4 border rounded">
+                <Persona />
+                {allowedPersons.length > 1 && (
+                <button onClick={() => removeAllowedPerson(index)} className="absolute top-2 right-2 text-red-500">
+                    Eliminar
+                </button>
+                )}
+                </div>
+            ))}
+            <button onClick={addAllowedPerson} className="text-blue-500">+ Añadir Persona</button>
+            </AccordionSection>
+
+            <AccordionSection title="Personas que no están permitidas a buscar al hijo" isOpen={openSection === 'no-permitidas'} setIsOpen={() => toggleSection('no-permitidas')}>
+            {notAllowedPersons.map((_, index) => (
+                <div key={index} className="relative mb-4 p-4 border rounded">
+                <Persona />
+                {notAllowedPersons.length > 1 && (
+                <button onClick={() => removeNotAllowedPerson(index)} className="absolute top-2 right-2 text-red-500">
+                    Eliminar
+                </button>
+                )}
+                </div>
+            ))}
+            <button onClick={addNotAllowedPerson} className="text-blue-500">+ Añadir Persona</button>
+            </AccordionSection>
         </div>
-      </form>
-      {/* Aquí se podrían añadir otros componentes relacionados con alta_padres si fuera necesario */}
+        <div className="flex justify-end mt-4">
+            <button onClick={onClose} className="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded mr-2">
+                Cancelar
+            </button>
+            <button onClick={onClose} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Guardar
+            </button>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default AltaPadres;
