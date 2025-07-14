@@ -1,55 +1,22 @@
 
 import { useEffect, useRef, useState } from 'react';
-
 import { Link, useNavigate } from 'react-router-dom';
-// Se elimina la importación de 'menuItems' de '../menuConfig'
 import { profileMenuItems } from '../menuConfig';
 
-// Navbar ahora recibe 'menuItems' como prop
 const Navbar = ({ menuItems = [] }) => {
-  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // Estado para el menú móvil
-  const [openDropdown, setOpenDropdown] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const dropdownRef = useRef(null);
-  const profileDropdownRef = useRef(null);
-  const mobileMenuRef = useRef(null); // Ref para el menú móvil
+  const mobileMenuRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      const targetElement = event.target;
-
-      // Cerrar dropdown de menú principal
-      if (dropdownRef.current && !dropdownRef.current.contains(targetElement)) {
-        let isToggler = false;
-        const togglerButtons = document.querySelectorAll('.menu-item-toggler');
-        togglerButtons.forEach(button => {
-          if (button.contains(targetElement)) {
-            isToggler = true;
-          }
-        });
-        if (!isToggler) {
-          setOpenDropdown(null);
-        }
-      }
-
-      // Cerrar dropdown de perfil
-      const profileMenuButton = document.getElementById('user-menu-button');
-      if (profileDropdownRef.current &&
-          !profileDropdownRef.current.contains(targetElement) &&
-          profileMenuButton &&
-          !profileMenuButton.contains(targetElement)
-        ) {
-        setProfileMenuOpen(false);
-      }
-
-      // Cerrar menú móvil
       const mobileMenuButton = document.getElementById('mobile-menu-button');
-      if (mobileMenuRef.current &&
-          !mobileMenuRef.current.contains(targetElement) &&
-          mobileMenuButton &&
-          !mobileMenuButton.contains(targetElement)
-         ) {
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target) &&
+        mobileMenuButton &&
+        !mobileMenuButton.contains(event.target)
+      ) {
         setMobileMenuOpen(false);
       }
     };
@@ -58,14 +25,11 @@ const Navbar = ({ menuItems = [] }) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [openDropdown, profileMenuOpen, mobileMenuOpen]);
-
+  }, [mobileMenuOpen]);
 
   const handleLogout = () => {
-    // Aquí iría la lógica de logout (ej. limpiar token, redirigir)
     console.log('Usuario deslogueado');
-    setProfileMenuOpen(false);
-    navigate('/login'); // Asumiendo que la ruta de login es /login
+    navigate('/login');
   };
 
   const userProfileImageUrl = 'https://via.placeholder.com/40'; // URL de imagen de perfil placeholder
@@ -80,45 +44,34 @@ const Navbar = ({ menuItems = [] }) => {
             </Link>
           </div>
 
-          {/* Menús Principales (Derecha) */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
               {menuItems.map((item) =>
                 item.submenu && item.submenu.length > 0 ? (
-                  <div key={item.id} className="relative" ref={item.submenu && openDropdown === item.id ? dropdownRef : null}> {/* Asignar ref dinámicamente */}
+                  <div key={item.id} className="relative group">
                     <button
                       type="button"
-                      className="menu-item-toggler px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700 focus:outline-none flex items-center" // Añadida clase menu-item-toggler
-                      onClick={() => setOpenDropdown(openDropdown === item.id ? null : item.id)}
+                      className="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700 focus:outline-none flex items-center"
                     >
                       {item.name}
                       <svg className="ml-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                       </svg>
                     </button>
-                    {openDropdown === item.id && (
-                      <div
-                        className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
-                        // onMouseEnter y onMouseLeave eliminados del div del dropdown
-                      >
-                        <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                          {item.submenu.map((subItem) => (
-                            <Link
-                              key={subItem.id}
-                              to={subItem.path || '#'}
-                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                              role="menuitem"
-                              onClick={() => {
-                                setOpenDropdown(null); // Cerrar dropdown al hacer clic
-                                // navigate(subItem.path); // Opcional: navegar directamente si es necesario
-                              }}
-                            >
-                              {subItem.name}
-                            </Link>
-                          ))}
-                        </div>
+                    <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50 hidden group-hover:block">
+                      <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                        {item.submenu.map((subItem) => (
+                          <Link
+                            key={subItem.id}
+                            to={subItem.path || '#'}
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                            role="menuitem"
+                          >
+                            {subItem.name}
+                          </Link>
+                        ))}
                       </div>
-                    )}
+                    </div>
                   </div>
                 ) : (
                   <Link
@@ -133,18 +86,15 @@ const Navbar = ({ menuItems = [] }) => {
             </div>
           </div>
 
-          {/* Menú de Perfil (Derecha) */}
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">
-              <div className="ml-3 relative" ref={profileDropdownRef}> {/* Asignar ref al contenedor del dropdown de perfil */}
+              <div className="ml-3 relative group">
                 <div>
                   <button
                     type="button"
                     className="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
                     id="user-menu-button"
-                    aria-expanded={profileMenuOpen}
                     aria-haspopup="true"
-                    onClick={() => setProfileMenuOpen(!profileMenuOpen)}
                   >
                     <span className="sr-only">Open user menu</span>
                     <img
@@ -154,40 +104,31 @@ const Navbar = ({ menuItems = [] }) => {
                     />
                   </button>
                 </div>
-                {profileMenuOpen && (
-                  <div
-                    className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50" // Added z-50
-                    role="menu"
-                    aria-orientation="vertical"
-                    aria-labelledby="user-menu-button"
-                    tabIndex="-1"
-                  >
-                    {profileMenuItems.map((item) =>
-                      item.action === 'logout' ? (
-                        <button
-                          key={item.id}
-                          onClick={handleLogout}
-                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          role="menuitem"
-                          tabIndex="-1"
-                        >
-                          {item.name}
-                        </button>
-                      ) : (
-                        <Link
-                          key={item.id}
-                          to={item.path}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          role="menuitem"
-                          tabIndex="-1"
-                          onClick={() => setProfileMenuOpen(false)}
-                        >
-                          {item.name}
-                        </Link>
-                      )
-                    )}
-                  </div>
-                )}
+                <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50 hidden group-hover:block">
+                  {profileMenuItems.map((item) =>
+                    item.action === 'logout' ? (
+                      <button
+                        key={item.id}
+                        onClick={handleLogout}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        role="menuitem"
+                        tabIndex="-1"
+                      >
+                        {item.name}
+                      </button>
+                    ) : (
+                      <Link
+                        key={item.id}
+                        to={item.path}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        role="menuitem"
+                        tabIndex="-1"
+                      >
+                        {item.name}
+                      </Link>
+                    )
+                  )}
+                </div>
               </div>
             </div>
           </div>
