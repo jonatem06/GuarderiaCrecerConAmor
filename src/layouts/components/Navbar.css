@@ -129,3 +129,19 @@
 .profile-submenu-links:hover {
   background: #555;
 }
+
+@media screen and (max-width: 960px) {
+  .nav-menu {
+    display: none;
+  }
+
+  .navbar-container {
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .navbar-container {
+    justify-content: space-between;
+  }
+}
