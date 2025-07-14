@@ -68,6 +68,14 @@ const Navbar = ({ menuItems = [] }) => {
     navigate('/login'); // Asumiendo que la ruta de login es /login
   };
 
+  const handleSubmenuClick = (subItem) => {
+    if (subItem.path) {
+      navigate(subItem.path);
+    }
+    setOpenDropdown(null);
+    setMobileMenuOpen(false);
+  };
+
   const userProfileImageUrl = schoolImage; // URL de imagen de perfil placeholder
 
   return (
@@ -103,14 +111,18 @@ const Navbar = ({ menuItems = [] }) => {
                       >
                         <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                           {item.submenu.map((subItem) => (
-                            <Link
+                            <a
                               key={subItem.id}
-                              to={subItem.path || '#'}
+                              href={subItem.path || '#'}
                               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                               role="menuitem"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleSubmenuClick(subItem);
+                              }}
                             >
                               {subItem.name}
-                            </Link>
+                            </a>
                           ))}
                         </div>
                       </div>
@@ -231,16 +243,17 @@ const Navbar = ({ menuItems = [] }) => {
                   {openDropdown === item.id && (
                     <div className="pl-4">
                       {item.submenu.map((subItem) => (
-                        <Link
+                        <a
                           key={`mobile-${subItem.id}`}
-                          to={subItem.path || '#'}
+                          href={subItem.path || '#'}
                           className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                          onClick={() => {
-                            setMobileMenuOpen(false);
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleSubmenuClick(subItem);
                           }}
                         >
                           {subItem.name}
-                        </Link>
+                        </a>
                       ))}
                     </div>
                   )}
