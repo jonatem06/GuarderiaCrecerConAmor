@@ -109,7 +109,6 @@ const Navbar = ({ menuItems = [] }) => {
                               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                               role="menuitem"
                               onClick={() => {
-                                setOpenDropdown(null); // Cerrar dropdown al hacer clic
                                 // navigate(subItem.path); // Opcional: navegar directamente si es necesario
                               }}
                             >
@@ -240,7 +239,10 @@ const Navbar = ({ menuItems = [] }) => {
                           to={subItem.path || '#'}
                           className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                           onClick={() => {
-                            setMobileMenuOpen(false);
+                            setTimeout(() => {
+                              setMobileMenuOpen(false);
+                              setOpenDropdown(null);
+                            }, 100);
                           }}
                         >
                           {subItem.name}
