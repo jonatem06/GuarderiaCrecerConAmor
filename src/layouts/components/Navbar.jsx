@@ -1,9 +1,9 @@
 
 import { useEffect, useRef, useState } from 'react';
-
 import { Link, useNavigate } from 'react-router-dom';
 // Se elimina la importación de 'menuItems' de '../menuConfig'
 import { profileMenuItems } from '../menuConfig';
+import schoolImage from '../../assets/img/school/crecer_con_amor.jpeg';
 
 // Navbar ahora recibe 'menuItems' como prop
 const Navbar = ({ menuItems = [] }) => {
@@ -68,7 +68,7 @@ const Navbar = ({ menuItems = [] }) => {
     navigate('/login'); // Asumiendo que la ruta de login es /login
   };
 
-  const userProfileImageUrl = 'https://via.placeholder.com/40'; // URL de imagen de perfil placeholder
+  const userProfileImageUrl = schoolImage; // URL de imagen de perfil placeholder
 
   return (
     <nav className="bg-gray-800 text-white">
@@ -108,10 +108,6 @@ const Navbar = ({ menuItems = [] }) => {
                               to={subItem.path || '#'}
                               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                               role="menuitem"
-                              onClick={() => {
-                                setOpenDropdown(null); // Cerrar dropdown al hacer clic
-                                // navigate(subItem.path); // Opcional: navegar directamente si es necesario
-                              }}
                             >
                               {subItem.name}
                             </Link>
@@ -239,10 +235,6 @@ const Navbar = ({ menuItems = [] }) => {
                           key={`mobile-${subItem.id}`}
                           to={subItem.path || '#'}
                           className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                          onClick={() => {
-                            setMobileMenuOpen(false);
-                            setOpenDropdown(null);
-                          }}
                         >
                           {subItem.name}
                         </Link>
