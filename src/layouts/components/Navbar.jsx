@@ -245,9 +245,6 @@ const Navbar = ({ menuItems = [], setUser }) => {
                           key={`mobile-${subItem.id}`}
                           to={subItem.path || '#'}
                           className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                          onClick={() => {
-                            // No-op
-                          }}
                         >
                           {subItem.name}
                         </Link>
