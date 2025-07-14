@@ -76,6 +76,12 @@ const Navbar = ({ menuItems = [], setUser }) => {
     navigate('/login'); // Asumiendo que la ruta de login es /login
   };
 
+  const handleNavigate = (path) => {
+    navigate(path);
+    setMobileMenuOpen(false);
+    setOpenDropdown(null);
+  };
+
   return (
     <nav className="bg-gray-800 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -242,11 +248,7 @@ const Navbar = ({ menuItems = [], setUser }) => {
                       {item.submenu.map((subItem) => (
                         <div
                           key={`mobile-${subItem.id}`}
-                          onClick={() => {
-                            navigate(subItem.path);
-                            setMobileMenuOpen(false);
-                            setOpenDropdown(null);
-                          }}
+                          onClick={() => handleNavigate(subItem.path)}
                           className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                         >
                           {subItem.name}
