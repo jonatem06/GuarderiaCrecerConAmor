@@ -15,45 +15,6 @@ const Navbar = ({ menuItems = [] }) => {
   const profileDropdownRef = useRef(null);
   const mobileMenuRef = useRef(null); // Ref para el menú móvil
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      const targetElement = event.target;
-
-      // Cerrar dropdown de menú principal
-      if (dropdownRef.current && !dropdownRef.current.contains(targetElement)) {
-        // Check if the click is on a submenu item
-        if (targetElement.closest('[role="menuitem"]')) {
-          return;
-        }
-        setOpenDropdown(null);
-      }
-
-      // Cerrar dropdown de perfil
-      const profileMenuButton = document.getElementById('user-menu-button');
-      if (profileDropdownRef.current &&
-          !profileDropdownRef.current.contains(targetElement) &&
-          profileMenuButton &&
-          !profileMenuButton.contains(targetElement)
-        ) {
-        setProfileMenuOpen(false);
-      }
-
-      // Cerrar menú móvil
-      const mobileMenuButton = document.getElementById('mobile-menu-button');
-      if (mobileMenuRef.current &&
-          !mobileMenuRef.current.contains(targetElement) &&
-          mobileMenuButton &&
-          !mobileMenuButton.contains(targetElement)
-         ) {
-        setMobileMenuOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [openDropdown, profileMenuOpen, mobileMenuOpen]);
 
 
   const handleLogout = () => {
@@ -92,26 +53,15 @@ const Navbar = ({ menuItems = [] }) => {
                       </svg>
                     </button>
                     {openDropdown === item.id && (
-                      <div
-                        className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
-                        // onMouseEnter y onMouseLeave eliminados del div del dropdown
-                      >
-                        <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                          {item.submenu.map((subItem) => (
-                            <Link
-                              key={subItem.id}
-                              to={subItem.path || '#'}
-                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                              role="menuitem"
-                              onClick={() => {
-                                setOpenDropdown(null); // Cerrar dropdown al hacer clic
-                                // navigate(subItem.path); // Opcional: navegar directamente si es necesario
-                              }}
-                            >
-                              {subItem.name}
-                            </Link>
-                          ))}
-                        </div>
+                      <div>
+                        {item.submenu.map((subItem) => (
+                          <Link
+                            key={subItem.id}
+                            to={subItem.path || '#'}
+                          >
+                            {subItem.name}
+                          </Link>
+                        ))}
                       </div>
                     )}
                   </div>
@@ -228,16 +178,11 @@ const Navbar = ({ menuItems = [] }) => {
                     </svg>
                   </button>
                   {openDropdown === item.id && (
-                    <div className="pl-4">
+                    <div>
                       {item.submenu.map((subItem) => (
                         <Link
                           key={`mobile-${subItem.id}`}
                           to={subItem.path || '#'}
-                          className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                          onClick={() => {
-                            setMobileMenuOpen(false);
-                            setOpenDropdown(null);
-                          }}
                         >
                           {subItem.name}
                         </Link>
