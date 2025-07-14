@@ -229,7 +229,7 @@ const Navbar = ({ menuItems = [], setUser }) => {
 
       {/* Menú Móvil */}
       {mobileMenuOpen && (
-        <div className="md:hidden" id="mobile-menu" ref={mobileMenuRef}>
+        <div className="md:hidden z-50" id="mobile-menu" ref={mobileMenuRef}>
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {menuItems.map((item) => (
               item.submenu && item.submenu.length > 0 ? (
@@ -249,7 +249,7 @@ const Navbar = ({ menuItems = [], setUser }) => {
                         <div
                           key={`mobile-${subItem.id}`}
                           onClick={() => handleNavigate(subItem.path)}
-                          className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                          className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium cursor-pointer"
                         >
                           {subItem.name}
                         </div>
