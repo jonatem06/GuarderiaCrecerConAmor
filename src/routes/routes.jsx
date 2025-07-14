@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { BrowserRouter, Routes } from 'react-router-dom'; // Route importado
 import ProtectedRoute from '../components/route_guards/ProtectedRoute';
 import MainLayout from '../layouts/MainLayout'; // Importar MainLayout
@@ -8,69 +9,69 @@ import PersonalRoutes from './personal_routes/personal_routes';
 // Importar otros componentes de página que usarán MainLayout si es necesario
 // import Perfil from '../modules/perfil/Perfil'; // Ejemplo
 
-const User = {
-  rol: 'Directora',
-  permisos: ['ver_reportes', 'editar_niños'],
-  // navMenuItems se define aquí directamente para simulación.
-  // En una aplicación real, esto vendría de una API o lógica de negocio basada en el rol/permisos.
-  navMenuItems: [
-    {
-      id: 'dashboard',
-      name: 'Dashboard',
-      path:'/dashboard',
-      icon: null,
-    },
-    {
-      id: 'finanzas',
-      name: 'Reporte Finanzas',
-      path: '/finanzas/ver_finanzas',
-      icon: null,
-    },
-    {
-      id: 'personal',
-      name: 'Ver personal',
-      path: '/personal/ver_personal',
-      icon: null
-    }
-    ,
-    {
-      id: 'padres',
-      name: 'Padres',
-      path: null,
-      icon: null,
-      submenu:[
-        {
-          id: 'ver_padres',
-          name: 'Ver Padres',
-          path: '/padres/ver_padres',
-          icon: null
-        },
-        {
-          id: 'ver_reportes',
-          name: 'Ver reportes',
-          path: '/reportes/ver_reportes',
-          icon: null
-        }
-      ]
-    }
-  ]
-};
-
 function RouteComponent() {
+  const [user, setUser] = useState({
+    rol: 'Directora',
+    permisos: ['ver_reportes', 'editar_niños'],
+    // navMenuItems se define aquí directamente para simulación.
+    // En una aplicación real, esto vendría de una API o lógica de negocio basada en el rol/permisos.
+    navMenuItems: [
+      {
+        id: 'dashboard',
+        name: 'Dashboard',
+        path:'/dashboard',
+        icon: null,
+      },
+      {
+        id: 'finanzas',
+        name: 'Reporte Finanzas',
+        path: '/finanzas/ver_finanzas',
+        icon: null,
+      },
+      {
+        id: 'personal',
+        name: 'Ver personal',
+        path: '/personal/ver_personal',
+        icon: null
+      }
+      ,
+      {
+        id: 'padres',
+        name: 'Padres',
+        path: null,
+        icon: null,
+        submenu:[
+          {
+            id: 'ver_padres',
+            name: 'Ver Padres',
+            path: '/padres/ver_padres',
+            icon: null
+          },
+          {
+            id: 'ver_reportes',
+            name: 'Ver reportes',
+            path: '/reportes/ver_reportes',
+            icon: null
+          }
+        ]
+      }
+    ]
+  });
+
   return (
     <BrowserRouter>
       <Routes>
-{PadresRoutes({          ProtectedRoute,          User,          Layout: (props) => <MainLayout userMenuItems={User.navMenuItems} {...props} />        })}
+        {PadresRoutes({          ProtectedRoute,          User: user,          Layout: (props) => <MainLayout userMenuItems={user.navMenuItems} setUser={setUser} {...props} />        })}
         {PersonalRoutes({
           ProtectedRoute,
-          User,
-          Layout: (props) => <MainLayout userMenuItems={User.navMenuItems} {...props} />
+          User: user,
+          Layout: (props) => <MainLayout userMenuItems={user.navMenuItems} setUser={setUser} {...props} />
         })}
         {LoginRoutes()}
         {FinanzasRoutes({
           ProtectedRoute,
-          User,
-          Layout: (props) => <MainLayout userMenuItems={User.navMenuItems} {...props} />
+          User: user,
+          Layout: (props) => <MainLayout userMenuItems={user.navMenuItems} setUser={setUser} {...props} />
         })}
       </Routes>
     </BrowserRouter>

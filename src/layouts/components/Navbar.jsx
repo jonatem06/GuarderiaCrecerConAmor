@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { profileMenuItems } from '../menuConfig';
 
 // Navbar ahora recibe 'menuItems' como prop
-const Navbar = ({ menuItems = [] }) => {
+const Navbar = ({ menuItems = [], setUser }) => {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // Estado para el menú móvil
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -65,6 +65,7 @@ const Navbar = ({ menuItems = [] }) => {
     // Aquí iría la lógica de logout (ej. limpiar token, redirigir)
     console.log('Usuario deslogueado');
     setProfileMenuOpen(false);
+    setUser(null);
     navigate('/login'); // Asumiendo que la ruta de login es /login
   };
 
@@ -282,7 +283,6 @@ const Navbar = ({ menuItems = [] }) => {
                     key={`mobile-${item.id}`}
                     onClick={() => {
                       handleLogout();
-                      setMobileMenuOpen(false);
                     }}
                     className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
                   >

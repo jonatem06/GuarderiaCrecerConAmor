@@ -2,10 +2,10 @@ import React from 'react';
 // import PropTypes from 'prop-types'; // Eliminado
 import Navbar from './components/Navbar';
 
-const MainLayout = ({ children, userMenuItems }) => { // Se añade userMenuItems a las props
+const MainLayout = ({ children, userMenuItems, setUser }) => { // Se añade userMenuItems y setUser a las props
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar menuItems={userMenuItems} /> {/* Se pasa userMenuItems al Navbar */}
+      <Navbar menuItems={userMenuItems} setUser={setUser} /> {/* Se pasa userMenuItems y setUser al Navbar */}
       <main className="flex-grow bg-gray-100">
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           {children}
