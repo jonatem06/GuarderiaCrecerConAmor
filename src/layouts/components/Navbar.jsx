@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 // Se elimina la importación de 'menuItems' de '../menuConfig'
 import { profileMenuItems } from '../menuConfig';
+import userProfileImageUrl from '../../assets/img/school/crecer_con_amor.jpeg';
 
 // Navbar ahora recibe 'menuItems' como prop
 const Navbar = ({ menuItems = [], setUser }) => {
@@ -74,8 +75,6 @@ const Navbar = ({ menuItems = [], setUser }) => {
     setUser(null);
     navigate('/login'); // Asumiendo que la ruta de login es /login
   };
-
-  const userProfileImageUrl = 'https://via.placeholder.com/40'; // URL de imagen de perfil placeholder
 
   return (
     <nav className="bg-gray-800 text-white">
@@ -241,13 +240,17 @@ const Navbar = ({ menuItems = [], setUser }) => {
                   {openDropdown === item.id && (
                     <div className="pl-4">
                       {item.submenu.map((subItem) => (
-                        <Link
+                        <div
                           key={`mobile-${subItem.id}`}
-                          to={subItem.path || '#'}
+                          onClick={() => {
+                            navigate(subItem.path);
+                            setMobileMenuOpen(false);
+                            setOpenDropdown(null);
+                          }}
                           className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                         >
                           {subItem.name}
-                        </Link>
+                        </div>
                       ))}
                     </div>
                   )}
