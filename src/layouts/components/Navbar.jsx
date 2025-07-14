@@ -1,7 +1,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 // Se elimina la importación de 'menuItems' de '../menuConfig'
 import { profileMenuItems } from '../menuConfig';
 
@@ -11,9 +11,15 @@ const Navbar = ({ menuItems = [], setUser }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // Estado para el menú móvil
   const [openDropdown, setOpenDropdown] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
   const dropdownRef = useRef(null);
   const profileDropdownRef = useRef(null);
   const mobileMenuRef = useRef(null); // Ref para el menú móvil
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+    setOpenDropdown(null);
+  }, [location]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -240,10 +246,7 @@ const Navbar = ({ menuItems = [], setUser }) => {
                           to={subItem.path || '#'}
                           className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                           onClick={() => {
-                            setTimeout(() => {
-                              setMobileMenuOpen(false);
-                              setOpenDropdown(null);
-                            }, 100);
+                            // No-op
                           }}
                         >
                           {subItem.name}
