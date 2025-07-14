@@ -21,16 +21,11 @@ const Navbar = ({ menuItems = [] }) => {
 
       // Cerrar dropdown de menú principal
       if (dropdownRef.current && !dropdownRef.current.contains(targetElement)) {
-        let isToggler = false;
-        const togglerButtons = document.querySelectorAll('.menu-item-toggler');
-        togglerButtons.forEach(button => {
-          if (button.contains(targetElement)) {
-            isToggler = true;
-          }
-        });
-        if (!isToggler) {
-          setOpenDropdown(null);
+        // Check if the click is on a submenu item
+        if (targetElement.closest('[role="menuitem"]')) {
+          return;
         }
+        setOpenDropdown(null);
       }
 
       // Cerrar dropdown de perfil
@@ -109,7 +104,8 @@ const Navbar = ({ menuItems = [] }) => {
                               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                               role="menuitem"
                               onClick={() => {
-                                navigate(subItem.path); // Opcional: navegar directamente si es necesario
+                                setOpenDropdown(null); // Cerrar dropdown al hacer clic
+                                // navigate(subItem.path); // Opcional: navegar directamente si es necesario
                               }}
                             >
                               {subItem.name}
@@ -239,7 +235,8 @@ const Navbar = ({ menuItems = [] }) => {
                           to={subItem.path || '#'}
                           className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                           onClick={() => {
-                            navigate(subItem.path);
+                            setMobileMenuOpen(false);
+                            setOpenDropdown(null);
                           }}
                         >
                           {subItem.name}
