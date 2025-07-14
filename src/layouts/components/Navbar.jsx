@@ -108,9 +108,8 @@ const Navbar = ({ menuItems = [] }) => {
                               to={subItem.path || '#'}
                               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                               role="menuitem"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setOpenDropdown(null);
+                              onClick={() => {
+                                navigate(subItem.path); // Opcional: navegar directamente si es necesario
                               }}
                             >
                               {subItem.name}
@@ -239,10 +238,8 @@ const Navbar = ({ menuItems = [] }) => {
                           key={`mobile-${subItem.id}`}
                           to={subItem.path || '#'}
                           className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setMobileMenuOpen(false);
-                            setOpenDropdown(null);
+                          onClick={() => {
+                            navigate(subItem.path);
                           }}
                         >
                           {subItem.name}
