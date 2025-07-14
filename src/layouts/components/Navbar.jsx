@@ -2,9 +2,9 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { Link, useNavigate } from 'react-router-dom';
+import '../../assets/css/navbar.css'; // Importamos el nuevo archivo CSS
+import userProfileImageUrl from '../../assets/img/school/crecer_con_amor.jpeg'; // Importar la imagen de perfil
 import { profileMenuItems } from '../menuConfig';
-import '../assets/css/navbar.css'; // Importamos el nuevo archivo CSS
-import userProfileImageUrl from '../assets/img/school/unnamed.png'; // Importar la imagen de perfil
 
 // Navbar ahora recibe 'menuItems' como prop
 const Navbar = ({ menuItems = [] }) => {
