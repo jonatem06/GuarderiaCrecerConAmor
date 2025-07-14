@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+#mobile-menu-toggle:checked ~ .mobile-menu {
+  display: block;
+}
+
 .group:hover .group-hover\\:block {
   display: block;
 }

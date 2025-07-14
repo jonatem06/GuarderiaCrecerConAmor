@@ -1,35 +1,18 @@
 
 import { useEffect, useRef, useState } from 'react';
+
 import { Link, useNavigate } from 'react-router-dom';
+// Se elimina la importación de 'menuItems' de '../menuConfig'
 import { profileMenuItems } from '../menuConfig';
 
+// Navbar ahora recibe 'menuItems' como prop
 const Navbar = ({ menuItems = [] }) => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const mobileMenuRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      const mobileMenuButton = document.getElementById('mobile-menu-button');
-      if (
-        mobileMenuRef.current &&
-        !mobileMenuRef.current.contains(event.target) &&
-        mobileMenuButton &&
-        !mobileMenuButton.contains(event.target)
-      ) {
-        setMobileMenuOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [mobileMenuOpen]);
 
   const handleLogout = () => {
+    // Aquí iría la lógica de logout (ej. limpiar token, redirigir)
     console.log('Usuario deslogueado');
-    navigate('/login');
+    navigate('/login'); // Asumiendo que la ruta de login es /login
   };
 
   const userProfileImageUrl = 'https://via.placeholder.com/40'; // URL de imagen de perfil placeholder
@@ -133,116 +116,93 @@ const Navbar = ({ menuItems = [] }) => {
             </div>
           </div>
 
-          {/* Botón de Menú Móvil (Hamburguesa) */}
           <div className="-mr-2 flex md:hidden">
-            <button
-              type="button"
-              className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-              id="mobile-menu-button" // ID para el botón del menú móvil
-              aria-controls="mobile-menu"
-              aria-expanded={mobileMenuOpen}
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
+            <input type="checkbox" id="mobile-menu-toggle" className="hidden" />
+            <label htmlFor="mobile-menu-toggle" className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
               <span className="sr-only">Open main menu</span>
-              {/* Icono de hamburguesa, se muestra si mobileMenuOpen es false */}
-              <svg className={`${mobileMenuOpen ? 'hidden' : 'block'} h-6 w-6`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
-              {/* Icono de cierre (X), se muestra si mobileMenuOpen es true */}
-              <svg className={`${mobileMenuOpen ? 'block' : 'hidden'} h-6 w-6`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <svg className="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
-            </button>
+            </label>
           </div>
         </div>
       </div>
 
-      {/* Menú Móvil */}
-      {mobileMenuOpen && (
-        <div className="md:hidden" id="mobile-menu" ref={mobileMenuRef}>
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {menuItems.map((item) => (
-              item.submenu && item.submenu.length > 0 ? (
-                <div key={`mobile-${item.id}`}>
-                  <button
-                    onClick={() => setOpenDropdown(openDropdown === item.id ? null : item.id)}
-                    className="w-full text-left text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                  >
-                    {item.name}
-                    <svg className={`inline-block ml-1 h-5 w-5 transform ${openDropdown === item.id ? 'rotate-180' : ''}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                    </svg>
-                  </button>
-                  {openDropdown === item.id && (
-                    <div className="pl-4">
-                      {item.submenu.map((subItem) => (
-                        <Link
-                          key={`mobile-${subItem.id}`}
-                          to={subItem.path || '#'}
-                          className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                          onClick={() => {
-                            setMobileMenuOpen(false);
-                            setOpenDropdown(null);
-                          }}
-                        >
-                          {subItem.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
+      <div className="hidden md:hidden mobile-menu">
+        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          {menuItems.map((item) => (
+            item.submenu && item.submenu.length > 0 ? (
+              <div key={`mobile-${item.id}`}>
+                <button
+                  onClick={() => setOpenDropdown(openDropdown === item.id ? null : item.id)}
+                  className="w-full text-left text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                >
+                  {item.name}
+                  <svg className={`inline-block ml-1 h-5 w-5 transform ${openDropdown === item.id ? 'rotate-180' : ''}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </button>
+                {openDropdown === item.id && (
+                  <div className="pl-4">
+                    {item.submenu.map((subItem) => (
+                      <Link
+                        key={`mobile-${subItem.id}`}
+                        to={subItem.path || '#'}
+                        className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                      >
+                        {subItem.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                key={`mobile-${item.id}`}
+                to={item.path || '#'}
+                className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+              >
+                {item.name}
+              </Link>
+            )
+          ))}
+        </div>
+        <div className="pt-4 pb-3 border-t border-gray-700">
+          <div className="flex items-center px-5">
+            <div className="flex-shrink-0">
+              <img className="h-10 w-10 rounded-full" src={userProfileImageUrl} alt="User profile" />
+            </div>
+            <div className="ml-3">
+              <div className="text-base font-medium leading-none text-white">Usuario</div>
+              <div className="text-sm font-medium leading-none text-gray-400">usuario@example.com</div>
+            </div>
+          </div>
+          <div className="mt-3 px-2 space-y-1">
+            {profileMenuItems.map((item) =>
+              item.action === 'logout' ? (
+                <button
+                  key={`mobile-${item.id}`}
+                  onClick={handleLogout}
+                  className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
+                >
+                  {item.name}
+                </button>
               ) : (
                 <Link
                   key={`mobile-${item.id}`}
-                  to={item.path || '#'}
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                  onClick={() => setMobileMenuOpen(false)}
+                  to={item.path}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
                 >
                   {item.name}
                 </Link>
               )
-            ))}
-          </div>
-          {/* Sección de perfil en menú móvil */}
-          <div className="pt-4 pb-3 border-t border-gray-700">
-            <div className="flex items-center px-5">
-              <div className="flex-shrink-0">
-                <img className="h-10 w-10 rounded-full" src={userProfileImageUrl} alt="User profile" />
-              </div>
-              <div className="ml-3">
-                {/* Estos datos deberían ser dinámicos si el usuario está logueado */}
-                <div className="text-base font-medium leading-none text-white">Usuario</div>
-                <div className="text-sm font-medium leading-none text-gray-400">usuario@example.com</div>
-              </div>
-            </div>
-            <div className="mt-3 px-2 space-y-1">
-              {profileMenuItems.map((item) =>
-                item.action === 'logout' ? (
-                  <button
-                    key={`mobile-${item.id}`}
-                    onClick={() => {
-                      handleLogout();
-                      setMobileMenuOpen(false);
-                    }}
-                    className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
-                  >
-                    {item.name}
-                  </button>
-                ) : (
-                  <Link
-                    key={`mobile-${item.id}`}
-                    to={item.path}
-                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {item.name}
-                  </Link>
-                )
-              )}
-            </div>
+            )}
           </div>
         </div>
-      )}
+      </div>
     </nav>
   );
 };
