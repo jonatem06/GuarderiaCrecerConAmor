@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Direccion from '../common/direccion';
 import InformacionContacto from '../common/informacion_contacto';
 import Persona from '../common/persona';
@@ -37,6 +37,41 @@ const UserSection = () => (
             <input
                 id="password"
                 type="password"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            />
+        </div>
+    </div>
+);
+
+const ColegiaturaSection = () => (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="Mensualidad">
+                Mensualidad
+            </label>
+            <input
+                id="Mensualidad"
+                type="text"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+        </div>
+        <div>
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="Inscripcion">
+                Inscripción
+            </label>
+            <input
+                id="inscripcion"
+                type="text"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            />
+        </div>
+        <div>
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="Mantenimiento">
+                Mantenimiento
+            </label>
+            <input
+                id="Mantenimiento"
+                type="text"
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
             />
         </div>
@@ -141,6 +176,12 @@ const AltaPadres = ({ isOpen, onClose }) => {
                 <div className="max-h-[75vh] overflow-y-auto p-4">
                     <AccordionSection title="Usuario" isOpen={openSections.usuario} setIsOpen={() => toggleSection('usuario')}>
                         <UserSection />
+                    </AccordionSection>
+
+                    <AccordionSection title="Colegiaturas" isOpen={openSections.colegiaturas} setIsOpen={() => toggleSection('colegiaturas')}>
+                        <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
+                            <ColegiaturaSection />
+                        </div>
                     </AccordionSection>
 
                     <AccordionSection title="Papá" isOpen={openSections.papa} setIsOpen={() => toggleSection('papa')}>
